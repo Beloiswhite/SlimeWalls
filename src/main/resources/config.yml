@@ -1,0 +1,18 @@
+###########################
+####### SlimeWalls ########
+###########################
+
+#Distance from wall's spawn to end point
+wall-steps: 20
+#
+#Delay between wall disappearing and spawning. WARN: time in Ticks.
+wall-delay: 20
+#
+# Lobby world(string name). Teleport player here after each mini-game round.
+lobby-world: world
+#
+#wall materials
+walls:
+
+#world, arena center pos, 4 faces positions, min players quantity, max players quantity
+arenas:

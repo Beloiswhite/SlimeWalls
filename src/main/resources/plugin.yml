@@ -1,0 +1,10 @@
+name: SlimeWalls
+version: '${project.version}'
+main: net.beloiswhite.slimewalls
+api-version: 1.18
+prefix: SlimeWalls
+authors: [ Beloiswhite ]
+description: SlimeWalls mini-game plugin
+commands:
+  slimewalls:
+    description: SlimeWalls description

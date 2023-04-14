@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.command.*;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -83,6 +84,7 @@ public final class slimewalls extends JavaPlugin implements Listener {
                 else if (args[0].equalsIgnoreCase("arena") && args[1].equalsIgnoreCase("run") && !args[2].isEmpty()) arena.arenaRun(getConfig().getConfigurationSection("arena." + args[2]));
                 else if (args[0].equalsIgnoreCase("wall") && args[1].equalsIgnoreCase("setup")) wall.wallSetup((Player) sender, args);
                 else if (args[0].equalsIgnoreCase("lobby") && !args[1].isEmpty() && !args[2].isEmpty()) lobby.toLobbyTeleport(Bukkit.getPlayer(args[1]), args[2]);
+                else if (args[0].equalsIgnoreCase("debug")) debugSW();
                 else return false;
 
                 return true;
@@ -178,6 +180,27 @@ public final class slimewalls extends JavaPlugin implements Listener {
             count++;
         }
         if (count <= 1) arena.arenaClose(getConfig().getConfigurationSection("arena." + e.getPlayer().getMetadata("SlimeWalls").get(0).asString()));
+    }
+
+    // Print info to console
+    public void debugSW() {
+        plugin().getLogger().info(ChatColor.GREEN + "[SlimeWalls] Debug info");
+
+        ConfigurationSection section = getConfig().getConfigurationSection("arena");
+        Set<String> keys = section.getKeys(false);
+        /*for (String key : keys) {
+            plugin().getLogger().info(section.getString(key) + ":");
+            for (String sectionkey : getConfig().getConfigurationSection("arena." + section.getString(key)).getKeys(false)) {
+                plugin().getLogger().info(getConfig().getConfigurationSection("arena." + section.getString(key)).getString(sectionkey));
+            }
+        }*/
+        for (String key : keys) {
+            String value = section.getString(key);
+            System.out.println(key + " = " + value);
+            for (String subkey : getConfig().getConfigurationSection("arena." + value).getKeys(false)) {
+                System.out.println(subkey + " = " + getConfig().getConfigurationSection("arena." + value).getString(subkey));
+            }
+        }
     }
 
 }

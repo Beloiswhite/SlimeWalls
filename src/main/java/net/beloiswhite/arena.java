@@ -20,9 +20,10 @@ public class arena {
     static Plugin plugin = slimewalls.plugin(); // Get plugin
 
     static HashMap<Player, String> arenaWorld = new HashMap<>();
-    static HashMap<Player, Integer> deathY = new HashMap<>(); //Arena's Y coordinate. Switching player to spectator when reaches this point.
-    static HashMap<Player, Integer> gameTime = new HashMap<>(); //Time limit on arena.
-    static HashMap<Player, Location> centerArena = new HashMap<>(); //Center of arena(Place where players spawn at game starting)
+    static HashMap<String, Boolean> isRunning = new HashMap<>();  // If arena hasn't any player - stop
+    static HashMap<Player, Integer> deathY = new HashMap<>();  // Arena's Y coordinate. Switching player to spectator when reaches this point.
+    static HashMap<Player, Integer> gameTime = new HashMap<>();  // Time limit on arena.
+    static HashMap<Player, Location> centerArena = new HashMap<>();  // Center of arena(Place where players spawn at game starting)
 
     // Size of arena (Players count)
     static HashMap<Player, Integer> minPlayers = new HashMap<>();
@@ -41,8 +42,15 @@ public class arena {
         }
 
         String[] facing_list = {"north", "south", "west", "east"};
+        isRunning.put(arena.getName(), true);  // Arena will spawn walls
 
         for (int i = 0; i < (arena.getInt("gameTime")*1200)/(slimewalls.wall_delay * slimewalls.wall_steps); i++) {
+
+            // Stop arena, or continue
+            if (!isRunning.get(arena.getName())) {
+                return;
+            }
+
             String facing = facing_list[new Random().nextInt(facing_list.length)];
             Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
                 public void run() {
@@ -79,11 +87,12 @@ public class arena {
                     player.setGameMode(GameMode.SURVIVAL);
                     player.sendMessage(ChatColor.GREEN + "[SLimeWalls] Победители: ");
                     for (String s : winners) {
-                        player.sendMessage(s);
+                        player.sendMessage(ChatColor.DARK_GREEN + s);
                     }
                     player.removeMetadata("SlimeWalls", plugin);
+                    isRunning.put(arena.getName(), false);  // Arena will not spawn walls
                 }
-            }, 60L);
+            }, 100L);
 
         }
     }
